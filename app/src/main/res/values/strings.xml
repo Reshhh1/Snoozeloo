@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Snoozeloo</string>
+
+    //List
+    <string name="alarms_list_title">"Your Alarms"</string>
+    <string name="no_alarms">"It's empty! Add the first alarm so you don't miss an important moment"</string>
 </resources>
