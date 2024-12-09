@@ -12,6 +12,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+/**
+ * RoundedCornerWrap wraps the content
+ * Note that: the cornerSize needs to be specified again if the composable should be clickable
+ * (Otherwise the click color change will not take the cornerSize in account)
+ */
 @Composable
 fun RoundedCornerWrap(
     modifier: Modifier = Modifier,

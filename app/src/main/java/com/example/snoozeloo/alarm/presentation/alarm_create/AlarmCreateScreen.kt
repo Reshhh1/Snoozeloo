@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -24,6 +25,7 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,21 +45,15 @@ fun AlarmCreateScreen(
             .padding(start = 20.dp, end = 20.dp, top = 35.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            CloseButton()
-            SaveButton()
-        }
-        AlarmDurationSection()
-        AlarmNameSection()
+        TopBarActions()
+        AlarmDuration()
+        AlarmName()
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AlarmDurationSection(modifier: Modifier = Modifier) {
+private fun AlarmDuration(modifier: Modifier = Modifier) {
     val timeInputState = rememberTimePickerState(
         initialHour = 0,
         initialMinute = 0,
@@ -93,12 +89,14 @@ private fun AlarmDurationSection(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun AlarmNameSection() {
+private fun AlarmName() {
     RoundedCornerWrap(
         modifier = Modifier
             .padding(top = 16.dp)
+            .clip(shape = RoundedCornerShape(CornerSize(12.dp)))
             .clickable {  }
-            .size(328.dp, 52.dp)
+            .size(328.dp, 52.dp),
+        cornerSize = CornerSize(12.dp)
     ) {
         Row(
             modifier = Modifier
@@ -118,6 +116,17 @@ private fun AlarmNameSection() {
                 color = colorResource(R.color.placeholder_color)
             )
         }
+    }
+}
+
+@Composable
+private fun TopBarActions() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        CloseButton()
+        SaveButton()
     }
 }
 
