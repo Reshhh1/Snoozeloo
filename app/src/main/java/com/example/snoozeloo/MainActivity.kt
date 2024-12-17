@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.example.snoozeloo.alarm.presentation.alarm_create.AlarmCreateScreen
+import com.example.snoozeloo.core.presentation.alarm_create.AlarmCreateScreen
 import com.example.snoozeloo.ui.theme.SnoozelooTheme
 
 class MainActivity : ComponentActivity() {

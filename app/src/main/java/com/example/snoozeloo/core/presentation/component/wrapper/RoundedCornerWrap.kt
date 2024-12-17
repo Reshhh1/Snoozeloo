@@ -1,4 +1,4 @@
-package com.example.snoozeloo.alarm.presentation.component.wrapper
+package com.example.snoozeloo.core.presentation.component.wrapper
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

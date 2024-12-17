@@ -1,4 +1,4 @@
-package com.example.snoozeloo.alarm.presentation.alarm_create
+package com.example.snoozeloo.core.presentation.alarm_create
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.snoozeloo.R
-import com.example.snoozeloo.alarm.presentation.component.wrapper.RoundedCornerWrap
+import com.example.snoozeloo.core.presentation.component.wrapper.RoundedCornerWrap
 
 @Composable
 fun AlarmCreateScreen(
