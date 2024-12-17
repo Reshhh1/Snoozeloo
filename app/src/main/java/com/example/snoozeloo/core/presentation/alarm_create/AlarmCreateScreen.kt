@@ -1,4 +1,4 @@
-package com.example.snoozeloo.alarm.presentation.alarm_create
+package com.example.snoozeloo.core.presentation.alarm_create
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,11 +33,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.snoozeloo.R
-import com.example.snoozeloo.alarm.presentation.component.wrapper.RoundedCornerWrap
+import com.example.snoozeloo.core.presentation.alarm_list.AlarmListViewModel
+import com.example.snoozeloo.core.presentation.component.wrapper.RoundedCornerWrap
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AlarmCreateScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewmodel: AlarmListViewModel = koinViewModel()
 ) {
     Column(
         modifier = modifier
@@ -45,6 +48,7 @@ fun AlarmCreateScreen(
             .padding(start = 20.dp, end = 20.dp, top = 35.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
+        Text(text = viewmodel.test())
         TopBarActions()
         AlarmDuration()
         AlarmName()
