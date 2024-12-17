@@ -12,7 +12,9 @@ interface AlarmRepository {
 }
 
 class AlarmRepositoryImpl : AlarmRepository {
-    private val _alarms = listOf<Alarm>()
+    private val _alarms = listOf<Alarm>(
+        Alarm(1, "Test-Alarm", "11-11-2024")
+    )
 
     override fun addAlarm(alarm: Alarm) {
         _alarms.plus(alarm)

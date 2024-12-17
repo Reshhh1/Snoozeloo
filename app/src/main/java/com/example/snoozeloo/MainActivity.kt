@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.snoozeloo.core.presentation.alarm_create.AlarmCreateScreen
 import com.example.snoozeloo.ui.theme.SnoozelooTheme
+import org.koin.androidx.compose.KoinAndroidContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,11 +19,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SnoozelooTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    containerColor = Color(0xFFF6F6F6)
-                ) { innerPadding ->
-                    AlarmCreateScreen(modifier = Modifier.padding(innerPadding))
+                KoinAndroidContext {
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        containerColor = Color(0xFFF6F6F6)
+                    ) { innerPadding ->
+                        AlarmCreateScreen(modifier = Modifier.padding(innerPadding))
+                    }
                 }
             }
         }
