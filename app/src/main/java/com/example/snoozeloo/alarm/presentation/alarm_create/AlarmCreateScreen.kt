@@ -111,7 +111,7 @@ private fun AlarmName() {
                 fontWeight = FontWeight.W600
             )
             Text(
-                text = "Alarm-1",
+                text = "YOUR ALARM NAME",
                 fontSize = 16.sp,
                 color = colorResource(R.color.placeholder_color)
             )
