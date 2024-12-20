@@ -6,7 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.snoozeloo.core.presentation.alarm_create.AlarmCreateScreen
-import kotlinx.serialization.Serializable
+import com.example.snoozeloo.core.presentation.navigation.destination.AlarmCreate
+import com.example.snoozeloo.core.presentation.navigation.destination.AlarmList
 
 @Composable
 fun AppNavigation() {
@@ -27,9 +28,3 @@ fun AppNavigation() {
         }
     }
 }
-
-@Serializable
-object AlarmList
-
-@Serializable
-object AlarmCreate
