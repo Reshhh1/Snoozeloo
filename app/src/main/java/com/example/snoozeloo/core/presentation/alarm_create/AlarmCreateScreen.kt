@@ -40,6 +40,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun AlarmCreateScreen(
     modifier: Modifier = Modifier,
+    navigateToList: () -> Unit = {},
     viewmodel: AlarmListViewModel = koinViewModel()
 ) {
     Column(
@@ -48,8 +49,7 @@ fun AlarmCreateScreen(
             .padding(start = 20.dp, end = 20.dp, top = 35.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
-        Text(text = viewmodel.test())
-        TopBarActions()
+        TopBarActions(navigateBack = navigateToList)
         AlarmDuration()
         AlarmName()
     }
@@ -124,21 +124,25 @@ private fun AlarmName() {
 }
 
 @Composable
-private fun TopBarActions() {
+private fun TopBarActions(
+    navigateBack: () -> Unit = {}
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        CloseButton()
+        CloseButton(onClick = navigateBack)
         SaveButton()
     }
 }
 
 @Composable
-private fun CloseButton() {
+private fun CloseButton(
+    onClick: () -> Unit = {}
+) {
     FilledIconButton (
         modifier = Modifier.size(40.dp),
-        onClick = { },
+        onClick = onClick,
         colors = IconButtonColors(
             containerColor = colorResource(R.color.secondary_color),
             contentColor = Color.White,
