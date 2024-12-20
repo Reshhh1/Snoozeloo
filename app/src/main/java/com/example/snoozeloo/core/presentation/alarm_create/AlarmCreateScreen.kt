@@ -12,28 +12,31 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimeInput
 import androidx.compose.material3.TimePickerDefaults
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.snoozeloo.R
 import com.example.snoozeloo.core.presentation.alarm_list.AlarmListViewModel
+import com.example.snoozeloo.core.presentation.component.custom.CustomAlertDialog
+import com.example.snoozeloo.core.presentation.component.custom.CustomTextButton
 import com.example.snoozeloo.core.presentation.component.wrapper.RoundedCornerWrap
 import org.koin.androidx.compose.koinViewModel
 
@@ -43,6 +46,7 @@ fun AlarmCreateScreen(
     navigateToList: () -> Unit = {},
     viewmodel: AlarmListViewModel = koinViewModel()
 ) {
+    var isOpen by remember { mutableStateOf(false)}
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -51,7 +55,16 @@ fun AlarmCreateScreen(
     ){
         TopBarActions(navigateBack = navigateToList)
         AlarmDuration()
-        AlarmName()
+        AlarmName(onButtonClick = { isOpen = !isOpen })
+        if (isOpen) {
+            CustomAlertDialog(
+                dialogTitle = "Alarm Name",
+                confirmButtonText = "Save",
+                onDismissRequest = { isOpen = !isOpen }
+            )
+        } else {
+            Text("CLOSED")
+        }
     }
 }
 
@@ -93,12 +106,12 @@ private fun AlarmDuration(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun AlarmName() {
+private fun AlarmName(onButtonClick: () -> Unit = {}) {
     RoundedCornerWrap(
         modifier = Modifier
             .padding(top = 16.dp)
             .clip(shape = RoundedCornerShape(CornerSize(12.dp)))
-            .clickable {  }
+            .clickable { onButtonClick() }
             .size(328.dp, 52.dp),
         cornerSize = CornerSize(12.dp)
     ) {
@@ -132,7 +145,11 @@ private fun TopBarActions(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         CloseButton(onClick = navigateBack)
-        SaveButton()
+        CustomTextButton(
+            modifier = Modifier.size(80.dp, 40.dp),
+            title = "Save",
+            onClick = {}
+        )
     }
 }
 
@@ -156,27 +173,6 @@ private fun CloseButton(
             imageVector = Icons.Filled.Close,
             contentDescription = "",
             tint = Color.White
-        )
-    }
-}
-
-@Composable
-private fun SaveButton() {
-    TextButton (
-        modifier = Modifier.size(80.dp, 40.dp),
-        onClick = {  },
-        enabled = true,
-        colors = ButtonColors(
-            containerColor = colorResource(R.color.primary_color),
-            contentColor = Color.White,
-            disabledContainerColor = colorResource(R.color.secondary_color),
-            disabledContentColor = Color.White
-        )
-    ) {
-        Text(
-            text = "Save",
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center
         )
     }
 }
