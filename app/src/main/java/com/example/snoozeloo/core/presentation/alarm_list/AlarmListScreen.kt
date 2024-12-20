@@ -26,7 +26,8 @@ import com.example.snoozeloo.R
 
 @Composable
 fun AlarmListScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToAlarmCreate: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 80.dp)
@@ -36,7 +37,9 @@ fun AlarmListScreen(
                 Title()
             },
             floatingActionButton = {
-                CreateAlarmButton()
+                CreateAlarmButton(
+                    onButtonClick = navigateToAlarmCreate
+                )
             },
             floatingActionButtonPosition = FabPosition.Center
         ) { paddingValues ->
@@ -59,10 +62,12 @@ private fun Title() {
 }
 
 @Composable
-private fun CreateAlarmButton() {
+private fun CreateAlarmButton(
+    onButtonClick: () -> Unit = {}
+) {
     FloatingActionButton(
         modifier = Modifier.size(65.dp),
-        onClick = {},
+        onClick = onButtonClick,
         shape = RoundedCornerShape((50.dp)),
         containerColor = colorResource(R.color.primary_color)
     ) {
