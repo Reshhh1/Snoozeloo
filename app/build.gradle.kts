@@ -61,12 +61,15 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //Koin
     implementation(libs.koin.androidx.compose)
     implementation(libs.koin.test)
     testImplementation(libs.koin.android.test)
 
+    //RoomDB
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
 
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
