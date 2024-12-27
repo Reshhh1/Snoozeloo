@@ -10,6 +10,7 @@ data class AlarmEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val title: String,
-//    val time: String,
+    val initialHour: String = "00",
+    val initialMinute: String = "00",
     val createdAt: Long
 )

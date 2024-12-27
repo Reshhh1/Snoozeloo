@@ -1,5 +1,7 @@
 package com.example.snoozeloo.core.presentation.alarm_create
 
+import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,70 +14,73 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.Text
-import androidx.compose.material3.TimeInput
-import androidx.compose.material3.TimePickerDefaults
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.snoozeloo.R
-import com.example.snoozeloo.core.presentation.alarm_list.AlarmListViewModel
-import com.example.snoozeloo.core.presentation.component.custom.CustomAlertDialog
+import com.example.snoozeloo.core.presentation.component.custom.CustomNumberField
 import com.example.snoozeloo.core.presentation.component.custom.CustomTextButton
+import com.example.snoozeloo.core.presentation.component.custom.CustomTextFieldDialog
 import com.example.snoozeloo.core.presentation.component.wrapper.RoundedCornerWrap
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AlarmCreateScreen(
     modifier: Modifier = Modifier,
     navigateToList: () -> Unit = {},
-    viewmodel: AlarmListViewModel = koinViewModel()
+    state: AlarmCreateState,
+    onEvent: (AlarmEvent) -> Unit
 ) {
-    var isOpen by remember { mutableStateOf(false)}
+
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(start = 20.dp, end = 20.dp, top = 35.dp),
+            .padding(start = 15.dp, end = 20.dp, top = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
-        TopBarActions(navigateBack = navigateToList)
-        AlarmDuration()
-        AlarmName(onButtonClick = { isOpen = !isOpen })
-        if (isOpen) {
-            CustomAlertDialog(
-                dialogTitle = "Alarm Name",
-                confirmButtonText = "Save",
-                onDismissRequest = { isOpen = !isOpen }
-            )
-        } else {
-            Text("CLOSED")
-        }
+        TopBarActions(
+            navigateBack = navigateToList,
+            onSubmit = onEvent
+        )
+        AlarmDuration(
+            onHourChange = { onEvent(AlarmEvent.SetAlarmHours(it)) },
+            onMinuteChange = { onEvent(AlarmEvent.SetAlarmMinutes(it)) },
+            hours = state.time.initialHour,
+            minutes = state.time.initialMinute,
+        )
+        AlarmName(
+            name = state.name,
+            onButtonClick = { onEvent(AlarmEvent.IsTypingName(true)) }
+        )
+    }
+    if(state.isTypingName) {
+        CustomTextFieldDialog(
+            dialogTitle = "Alarm Name",
+            confirmButtonText = "Save",
+            onDismissRequest = { onEvent(AlarmEvent.IsTypingName(false)) },
+            value = state.name,
+            onValueChange = { onEvent(AlarmEvent.SetAlarmName(it)) }
+        )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AlarmDuration(modifier: Modifier = Modifier) {
-    val timeInputState = rememberTimePickerState(
-        initialHour = 0,
-        initialMinute = 0,
-        is24Hour = true
-    )
+private fun AlarmDuration(
+    onHourChange: (newHours: String) -> Unit,
+    onMinuteChange: (newMinutes: String) -> Unit,
+    hours: String,
+    minutes: String
+) {
     RoundedCornerWrap(
         modifier = Modifier
             .padding(top = 30.dp)
@@ -85,33 +90,67 @@ private fun AlarmDuration(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            TimeInput(
-                modifier = modifier
-                    .align(Alignment.CenterHorizontally),
-                state = timeInputState,
-                colors = TimePickerDefaults.colors(
-                    timeSelectorSelectedContainerColor = colorResource(R.color.secondary_color),
-                    timeSelectorUnselectedContainerColor = colorResource(R.color.secondary_color),
-                    timeSelectorSelectedContentColor = colorResource(R.color.primary_color),
-                    timeSelectorUnselectedContentColor = colorResource(R.color.placeholder_color),
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 35.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AlarmTimeInput(
+                    number = hours,
+                    onValueChange = onHourChange
                 )
-            )
+                Text(
+                    text = ":",
+                    style = TextStyle(
+                        fontSize = 50.sp,
+                        fontWeight = FontWeight.W600,
+                    )
+                )
+                AlarmTimeInput(
+                    number = minutes,
+                    onValueChange = onMinuteChange
+                )
+            }
         }
-        Text(
-            modifier = modifier,
-            text = "Alarm in 7h 15min",
-            color = colorResource(R.color.placeholder_color)
-        )
     }
 }
 
 @Composable
-private fun AlarmName(onButtonClick: () -> Unit = {}) {
+private fun AlarmTimeInput(
+    number: String,
+    onValueChange: (String) -> Unit
+) {
+    CustomNumberField(
+        modifier = Modifier
+            .clip(RoundedCornerShape(5.dp))
+            .background(colorResource(R.color.secondary_color))
+            .size(100.dp, 120.dp),
+        value = number,
+        onValueChange = {
+            Log.d("AlarmTimeInput", "Value: ${it.length}")
+//            if (it.length >= 3) return@CustomNumberField
+            onValueChange(it)
+        },
+        textStyle = TextStyle(
+            color = colorResource(R.color.primary_color),
+        )
+    )
+}
+
+@Composable
+private fun AlarmName(
+    onButtonClick: () -> Unit,
+    name: String,
+) {
     RoundedCornerWrap(
         modifier = Modifier
             .padding(top = 16.dp)
             .clip(shape = RoundedCornerShape(CornerSize(12.dp)))
-            .clickable { onButtonClick() }
+            .clickable {
+                onButtonClick()
+            }
             .size(328.dp, 52.dp),
         cornerSize = CornerSize(12.dp)
     ) {
@@ -128,7 +167,7 @@ private fun AlarmName(onButtonClick: () -> Unit = {}) {
                 fontWeight = FontWeight.W600
             )
             Text(
-                text = "YOUR ALARM NAME",
+                text = name,
                 fontSize = 16.sp,
                 color = colorResource(R.color.placeholder_color)
             )
@@ -138,7 +177,8 @@ private fun AlarmName(onButtonClick: () -> Unit = {}) {
 
 @Composable
 private fun TopBarActions(
-    navigateBack: () -> Unit = {}
+    navigateBack: () -> Unit = {},
+    onSubmit: (event: AlarmEvent) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -148,7 +188,7 @@ private fun TopBarActions(
         CustomTextButton(
             modifier = Modifier.size(80.dp, 40.dp),
             title = "Save",
-            onClick = {}
+            onClick = { onSubmit(AlarmEvent.SaveAlarm) }
         )
     }
 }

@@ -30,7 +30,7 @@ fun AlarmListScreen(
     navigateToAlarmCreate: () -> Unit = {}
 ) {
     Column(
-        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 50.dp)
+        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp)
     ){
         Scaffold (
             topBar = {
