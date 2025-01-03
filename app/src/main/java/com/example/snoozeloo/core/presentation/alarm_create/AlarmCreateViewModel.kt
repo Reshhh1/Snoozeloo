@@ -58,13 +58,15 @@ class AlarmCreateViewModel(
     }
 
     private fun createAlarm() {
-        val name = state.value.name
-        val time = state.value.time
+        val alarmModel = AlarmModel(
+            name = state.value.name,
+            time = state.value.time
+        ).getAlarmModelOrDefault()
 
         val alarmEntity = AlarmEntity(
-            title = name,
-            initialHour = time.initialHour,
-            initialMinute = time.initialMinute,
+            title = alarmModel.name,
+            initialHour = alarmModel.time.initialHour,
+            initialMinute = alarmModel.time.initialMinute,
             createdAt = System.currentTimeMillis()
         )
         viewModelScope.launch {
