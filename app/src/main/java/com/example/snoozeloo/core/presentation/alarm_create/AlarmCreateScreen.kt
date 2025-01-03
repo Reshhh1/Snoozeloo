@@ -1,7 +1,5 @@
 package com.example.snoozeloo.core.presentation.alarm_create
 
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.FilledIconButton
@@ -19,17 +18,26 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.snoozeloo.R
-import com.example.snoozeloo.core.presentation.component.custom.CustomNumberField
+import com.example.snoozeloo.core.presentation.alarm_create.component.AlarmTimeInput
 import com.example.snoozeloo.core.presentation.component.custom.CustomTextButton
 import com.example.snoozeloo.core.presentation.component.custom.CustomTextFieldDialog
 import com.example.snoozeloo.core.presentation.component.wrapper.RoundedCornerWrap
@@ -86,56 +94,86 @@ private fun AlarmDuration(
             .padding(top = 30.dp)
             .size(328.dp, 176.dp)
     ) {
-        Column(
+        Row(
             modifier = Modifier
-                .fillMaxWidth()
+                .padding(horizontal = 35.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 35.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                AlarmTimeInput(
-                    number = hours,
-                    onValueChange = onHourChange
+            val focusRequester by remember { mutableStateOf(FocusRequester()) }
+            TimeHourInput(
+                onHourChange = onHourChange,
+                hours = hours,
+                focusRequester = focusRequester
+            )
+            Text(
+                text = ":",
+                style = TextStyle(
+                    fontSize = 50.sp,
+                    fontWeight = FontWeight.W600,
                 )
-                Text(
-                    text = ":",
-                    style = TextStyle(
-                        fontSize = 50.sp,
-                        fontWeight = FontWeight.W600,
-                    )
-                )
-                AlarmTimeInput(
-                    number = minutes,
-                    onValueChange = onMinuteChange
-                )
-            }
+            )
+            TimeMinuteInput(
+                onMinuteChange = onMinuteChange,
+                minutes = minutes,
+                focusRequester = focusRequester
+            )
         }
     }
 }
 
 @Composable
-private fun AlarmTimeInput(
-    number: String,
-    onValueChange: (String) -> Unit
+private fun TimeHourInput(
+    onHourChange: (newHours: String) -> Unit,
+    hours: String,
+    focusRequester: FocusRequester
 ) {
-    CustomNumberField(
-        modifier = Modifier
-            .clip(RoundedCornerShape(5.dp))
-            .background(colorResource(R.color.secondary_color))
-            .size(100.dp, 120.dp),
-        value = number,
+    if(hours.length == 2) {
+        focusRequester.requestFocus()
+    }
+    AlarmTimeInput(
+        number = hours,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Next
+        ),
         onValueChange = {
-            Log.d("AlarmTimeInput", "Value: ${it.length}")
-//            if (it.length >= 3) return@CustomNumberField
-            onValueChange(it)
-        },
-        textStyle = TextStyle(
-            color = colorResource(R.color.primary_color),
-        )
+            onHourChange(it)
+            if(it.length >= 2) {
+                focusRequester.requestFocus()
+            }
+        }
+    )
+}
+
+@Composable
+private fun TimeMinuteInput(
+    onMinuteChange: (newMinutes: String) -> Unit,
+    minutes: String,
+    focusRequester: FocusRequester
+) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val localFocusManager = LocalFocusManager.current
+
+    fun hideKeyboardAndClearFocus() {
+        keyboardController?.hide()
+        localFocusManager.clearFocus()
+    }
+
+    if(minutes.length >= 2) { hideKeyboardAndClearFocus() }
+
+    AlarmTimeInput(
+        modifier = Modifier.focusRequester(focusRequester),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Done
+        ),
+        number = minutes,
+        onValueChange = {
+            onMinuteChange(it)
+            if(it.length >= 2) { hideKeyboardAndClearFocus() }
+        }
     )
 }
 
