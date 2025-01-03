@@ -9,13 +9,23 @@ data class AlarmModel(
 
     fun getValidTimeMinutes(): String {
         return if (time.validateTimeHours()) {
-            time.timeNormalizer(time.initialMinute, 59)
+            time.normalizeTime(time.initialMinute, 59)
         } else time.initialHour
     }
 
     fun getValidTimeHours(): String {
         return if (time.validateTimeHours()) {
-            time.timeNormalizer(time.initialHour, 23)
+            time.normalizeTime(time.initialHour, 23)
         } else time.initialHour
+    }
+
+    fun getAlarmModelOrDefault(): AlarmModel {
+        val alarmTime = time.copy(
+            initialHour = time.initialHour.ifEmpty { "00" },
+            initialMinute = time.initialMinute.ifEmpty { "00" }
+        ).normalizeFinalTime()
+        return this.copy(
+            time = alarmTime
+        )
     }
 }
