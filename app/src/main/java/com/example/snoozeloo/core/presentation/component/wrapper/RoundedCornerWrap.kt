@@ -22,14 +22,16 @@ fun RoundedCornerWrap(
     modifier: Modifier = Modifier,
     color: Color = Color.White,
     cornerSize: CornerSize = CornerSize(12.dp),
+    verticalArrangement: Arrangement.Vertical = Arrangement.Center,
+    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable () -> Unit
 ) {
     Column(
         modifier = modifier
             .clip(shape = RoundedCornerShape(cornerSize))
             .background(color),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = verticalArrangement,
+        horizontalAlignment = horizontalAlignment
     ) {
         content()
     }

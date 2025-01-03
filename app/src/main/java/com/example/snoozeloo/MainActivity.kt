@@ -7,6 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.snoozeloo.core.presentation.navigation.AppNavigation
@@ -20,11 +22,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             SnoozelooTheme {
                 KoinAndroidContext {
-                    Column(
+                    Scaffold(
                         modifier = Modifier.fillMaxSize()
                             .background(Color(0xFFF6F6F6)),
-                    ) {
-                        AppNavigation()
+                    ) { innerPadding ->
+                        Column(
+                            Modifier.padding(innerPadding)
+                        ) {
+                            AppNavigation()
+                        }
                     }
                 }
             }
