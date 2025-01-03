@@ -20,7 +20,7 @@ data class AlarmTime(
      * @param timeToNormalize time to normalize
      * @param maxTimeValue max time value
      */
-    fun timeNormalizer(timeToNormalize: String, maxTimeValue: Int): String {
+    fun normalizeTime(timeToNormalize: String, maxTimeValue: Int): String {
         val time = timeToNormalize.toIntOrNull() ?: return ""
         val maxDoubleDigit = maxTimeValue.toString().first().digitToInt()
         return when {
@@ -30,6 +30,15 @@ data class AlarmTime(
         }
     }
 
+    /**
+     * Normalize final time to double digit to ensure correct time format
+     */
+    fun normalizeFinalTime(): AlarmTime {
+        return this.copy(
+            initialHour = if (initialHour.length == 1) "0$initialHour" else initialHour,
+            initialMinute = if (initialMinute.length == 1) "0$initialMinute" else initialMinute
+        )
+    }
 
     private fun validateTimeDigit(toBeValidated: String): Boolean {
         return toBeValidated.length in 0..2 && toBeValidated.isDigitsOnly()
