@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,6 +24,7 @@ fun CustomNumberField(
     modifier: Modifier = Modifier,
     value: String,
     textStyle: TextStyle = TextStyle(),
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onValueChange: (newValue: String) -> Unit = {}
 ) {
     BasicTextField(
@@ -40,7 +40,7 @@ fun CustomNumberField(
             fontSize = 50.sp,
             fontWeight = FontWeight.W600
         ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardOptions = keyboardOptions,
         decorationBox = { innerTextField ->
             Box(
                 modifier = Modifier
