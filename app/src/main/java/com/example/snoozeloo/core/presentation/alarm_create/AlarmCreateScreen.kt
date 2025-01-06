@@ -45,9 +45,9 @@ import com.example.snoozeloo.core.presentation.component.wrapper.RoundedCornerWr
 @Composable
 fun AlarmCreateScreen(
     modifier: Modifier = Modifier,
-    navigateToList: () -> Unit = {},
     state: AlarmCreateState,
-    onEvent: (AlarmEvent) -> Unit
+    onEvent: (AlarmEvent) -> Unit,
+    navigateToList: () -> Unit = {},
 ) {
 
     Column(
@@ -57,7 +57,7 @@ fun AlarmCreateScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
         TopBarActions(
-            navigateBack = navigateToList,
+            navigateToAlarmList = navigateToList,
             onSubmit = onEvent
         )
         AlarmDuration(
@@ -215,18 +215,21 @@ private fun AlarmName(
 
 @Composable
 private fun TopBarActions(
-    navigateBack: () -> Unit = {},
+    navigateToAlarmList: () -> Unit = {},
     onSubmit: (event: AlarmEvent) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        CloseButton(onClick = navigateBack)
+        CloseButton(onClick = navigateToAlarmList)
         CustomTextButton(
             modifier = Modifier.size(80.dp, 40.dp),
             title = "Save",
-            onClick = { onSubmit(AlarmEvent.SaveAlarm) }
+            onClick = {
+                onSubmit(AlarmEvent.SaveAlarm)
+                navigateToAlarmList()
+            }
         )
     }
 }
