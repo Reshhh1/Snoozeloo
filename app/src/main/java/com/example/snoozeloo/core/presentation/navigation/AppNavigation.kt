@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.snoozeloo.core.presentation.alarm_create.AlarmCreateScreen
 import com.example.snoozeloo.core.presentation.alarm_create.AlarmCreateViewModel
+import com.example.snoozeloo.core.presentation.alarm_list.AlarmListViewModel
 import com.example.snoozeloo.core.presentation.navigation.destination.AlarmCreate
 import com.example.snoozeloo.core.presentation.navigation.destination.AlarmList
 import org.koin.androidx.compose.koinViewModel
@@ -21,7 +22,10 @@ fun AppNavigation() {
         startDestination = AlarmList
     ) {
         composable<AlarmList> {
+            val viewModel = koinViewModel<AlarmListViewModel>()
+            val state by viewModel.state.collectAsState()
             AlarmListScreen(
+                state = state,
                 navigateToAlarmCreate = { navController.navigate(AlarmCreate) }
             )
         }

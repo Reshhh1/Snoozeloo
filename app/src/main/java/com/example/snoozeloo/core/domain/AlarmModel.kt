@@ -1,6 +1,4 @@
-package com.example.snoozeloo.core.data
-
-import com.example.snoozeloo.core.presentation.alarm_create.AlarmTime
+package com.example.snoozeloo.core.domain
 
 data class AlarmModel(
     val name: String,
