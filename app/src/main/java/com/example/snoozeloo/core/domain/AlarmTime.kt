@@ -1,4 +1,4 @@
-package com.example.snoozeloo.core.presentation.alarm_create
+package com.example.snoozeloo.core.domain
 
 import androidx.core.text.isDigitsOnly
 
