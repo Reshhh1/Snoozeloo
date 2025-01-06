@@ -1,4 +1,4 @@
-package com.example.snoozeloo.core.data
+package com.example.snoozeloo.core.domain
 
 import com.example.snoozeloo.core.presentation.alarm_create.AlarmTime
 
