@@ -3,6 +3,7 @@ package com.example.snoozeloo.core.data
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AlarmDao {
@@ -16,5 +17,5 @@ interface AlarmDao {
      * that when the data changes, the UI will be updated automatically.
      */
     @Query("SELECT * FROM alarm ORDER BY initialHour ASC, initialMinute ASC")
-    fun getAlarmsOrderedByDate(): List<AlarmEntity>
+    fun getAlarmsOrderedByDate(): Flow<List<AlarmEntity>>
 }
