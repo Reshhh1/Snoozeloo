@@ -1,6 +1,8 @@
-package com.example.snoozeloo.core.domain
+package com.example.snoozeloo.core.domain.model
 
 import androidx.core.text.isDigitsOnly
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 data class AlarmTime(
     var initialHour: String,
@@ -38,6 +40,12 @@ data class AlarmTime(
             initialHour = if (initialHour.length == 1) "0$initialHour" else initialHour,
             initialMinute = if (initialMinute.length == 1) "0$initialMinute" else initialMinute
         )
+    }
+
+    fun convertTimeToMilliseconds(): LocalDateTime? {
+        val timeString = "${initialHour}:${initialMinute}"
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        return LocalDateTime.parse(timeString, formatter)
     }
 
     private fun validateTimeDigit(toBeValidated: String): Boolean {

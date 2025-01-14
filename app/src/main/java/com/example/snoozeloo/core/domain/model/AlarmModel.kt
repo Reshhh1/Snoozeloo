@@ -1,4 +1,4 @@
-package com.example.snoozeloo.core.domain
+package com.example.snoozeloo.core.domain.model
 
 data class AlarmModel(
     val name: String,

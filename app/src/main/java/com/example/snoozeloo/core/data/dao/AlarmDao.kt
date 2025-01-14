@@ -1,8 +1,9 @@
-package com.example.snoozeloo.core.data
+package com.example.snoozeloo.core.data.dao
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
+import com.example.snoozeloo.core.data.entity.AlarmEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

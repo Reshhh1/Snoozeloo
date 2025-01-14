@@ -1,4 +1,4 @@
-package com.example.snoozeloo.core.data
+package com.example.snoozeloo.core.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
