@@ -1,9 +1,11 @@
-package com.example.snoozeloo.core.data
+package com.example.snoozeloo.core.data.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.snoozeloo.core.data.dao.AlarmDao
+import com.example.snoozeloo.core.data.entity.AlarmEntity
 
 @Database(
     entities = [AlarmEntity::class],
